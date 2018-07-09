@@ -4,6 +4,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/asio/signal_set.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/thread/thread.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -215,7 +216,7 @@ void application::quit() {
    io_serv->stop();
 }
 
-void application::exec() {
+void application::exec(int concurrency) {
    std::shared_ptr<boost::asio::signal_set> sigint_set(new boost::asio::signal_set(*io_serv, SIGINT));
    sigint_set->async_wait([sigint_set,this](const boost::system::error_code& err, int num) {
      quit();
@@ -234,7 +235,17 @@ void application::exec() {
      sigpipe_set->cancel();
    });
 
+   boost::thread_group group;
+
+   for (int i = 0; i < concurrency; i++) {
+     group.create_thread([&] {
+       io_serv->run();
+     });
+   }
+
    io_serv->run();
+
+   group.join_all();
 
    shutdown(); /// perform synchronous shutdown
 }

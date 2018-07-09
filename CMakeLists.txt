@@ -54,16 +54,4 @@ target_include_directories( appbase
 
 set_target_properties( appbase PROPERTIES PUBLIC_HEADER "${HEADERS}" )
 
-set(CPACK_PACKAGING_INSTALL_PREFIX /)
-
-install( TARGETS
-   appbase
-
-   RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR}
-   LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}
-   ARCHIVE DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}
-   PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}/appbase
-)
-install_directory_permissions( DIRECTORY ${CMAKE_INSTALL_FULL_INCLUDEDIR}/appbase )
-
-add_subdirectory( examples )
+# add_subdirectory( examples )

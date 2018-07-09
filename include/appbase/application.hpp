@@ -71,7 +71,7 @@ namespace appbase {
          /**
           *  Wait until quit(), SIGINT or SIGTERM and then shutdown
           */
-         void                 exec();
+         void                 exec(int concurrency = std::thread::hardware_concurrency());
          void                 quit();
 
          static application&  instance();
